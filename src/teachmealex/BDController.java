@@ -95,6 +95,20 @@ public class BDController {
         return palabras;
     }
 
+    public ArrayList<String> dameCategorias(){
+        ArrayList<String> categorias = new ArrayList<String>();
+        try {
+            Statement ms = this.connection.createStatement();
+            ResultSet rs = ms.executeQuery("SELECT distinct category FROM palabra order by category asc");
+            while (rs.next()){
+                categorias.add(rs.getString("category"));
+            }
+        }catch (SQLException e){
+            System.out.println("Error al generar el arraylist de categorias en BDController"+e.getSQLState());
+        }
+        return categorias;
+    }
+
     public ArrayList<Verbo> dameVerbos(){
         ArrayList<Verbo> verbos = new ArrayList<Verbo>();
         try {
