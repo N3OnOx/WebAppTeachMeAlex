@@ -5,9 +5,44 @@
 
 <body>
 <%
+    String completeURL = request.getRequestURL().toString() + "?" + request.getQueryString();
     ArrayList<String> categorias = new ArrayList<String>();
     BDController bdController = new BDController();
     categorias = bdController.dameCategorias();
+    String error = "";
+    String display = "none";
+    boolean check = true;
+    if (!completeURL.contains("null")){
+        String category = request.getParameter("category");
+        String esp = request.getParameter("esp");
+        String ing = request.getParameter("ing");
+        String cat = request.getParameter("cat");
+
+        if (!completeURL.contains("specialWord")) {
+            if (category.equalsIgnoreCase("Selecciona...")) {
+                error = "Tienes que seleccionar una categoría";
+                display = "block";
+            } else if (category.equalsIgnoreCase("0") && cat.equalsIgnoreCase("")) {
+                error = "Tienes que escribir una nueva categoría";
+                display = "block";
+                check = false;
+            }
+
+            if (check) {
+                if (!bdController.existePalabraEsp(esp)) {
+                    error = "No existe esa palabra en español";
+                    display = "block";
+                } else if (!bdController.existePDiccionario("ding", ing)) {
+                    error = "No existe esa palabra en ingles";
+                    display = "block";
+                }else {
+                    bdController.insertarPalabra(esp,ing,category, 1);
+                }
+            }
+        }else{
+            bdController.insertarPalabraEspecial(esp,ing,category, 1);
+        }
+    }
 %>
 <div class="wrapper">
     <%@include file="routes/navbar.jsp"%>
@@ -36,6 +71,7 @@
 
         <h2>Alta de palabra</h2>
         <p>Vamos a introducir palabras en nuestra cartera de vocabulario. Para ello, especifica el significado en español, asímismo en Inglés y por último, escribe o selecciona una categoría de la lista de categorías</p>
+        <div style="display: <%out.print(display);%>" id="#errorForm"><p style="color: red;">Error: <%out.print(error);%></p> </div>
         <form action="altaVoca.jsp">
             <div class="form-group row">
                 <label for="inputEsp" class="col-sm-2 col-form-label">Español</label>
@@ -69,7 +105,10 @@
                     <input type="text" class="form-control" name="cat" id="inputCat" placeholder="Escriba una nueva categoría">
                 </div>
             </div>
-
+            <div class="custom-control custom-checkbox my-1 mr-sm-2">
+                <input type="checkbox" name="specialWord" class="custom-control-input" id="customControlInline">
+                <label class="custom-control-label" for="customControlInline">Palabra especial</label>
+            </div>
             <div class="form-group row">
                 <div class="col-sm-10">
                     <button type="submit" class="btn btn-danger">Alta palabra</button>
@@ -79,6 +118,7 @@
         <div class="line"></div>
     </div>
 </div>
+
 
 <script type="text/javascript">
     function admSelectCheck(nameSelect)

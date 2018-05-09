@@ -11,6 +11,7 @@ public class BDController {
     private PreparedStatement existePalabra;
     private PreparedStatement existeVerbo;
     private PreparedStatement existeUsuario;
+    private PreparedStatement existePalabraEsp;
 
     public BDController(){
         try {
@@ -33,6 +34,8 @@ public class BDController {
             this.existePingDiccionario = connection.prepareStatement(SQLExistePingDiccionario);
             String SQLExisteUsuario = "select * from users where name = ? and password = ?";
             this.existeUsuario = connection.prepareStatement(SQLExisteUsuario);
+            String SQLExistePalabraEsp = "select palabra from desp where palabra = ?";
+            this.existePalabraEsp = connection.prepareStatement(SQLExistePalabraEsp);
         }catch (SQLException e){
             System.out.println("Error: "+e.getMessage());
         }
@@ -337,5 +340,39 @@ public class BDController {
             System.out.println("Error en palabra: "+e.getMessage());
         }
         return existe;
+    }
+    public boolean existePalabraEsp(String palabra){
+        boolean existe = true;
+        try {
+            existePalabraEsp.setString(1,palabra);
+            ResultSet rs = existePalabraEsp.executeQuery();
+            if (!rs.first()){
+                existe = false;
+            }
+        }catch (SQLException e){
+            System.out.println("Error: "+e.getMessage());
+        }
+        return existe;
+    }
+
+    public void insertarPalabra(String esp, String ing, String cat, int codUsuario){
+        String sql = "insert into palabra values ('"+esp+"','"+ing+"', '"+cat+"', "+codUsuario+", ' ', ' ')";
+        try {
+            Statement ms = this.connection.createStatement();
+            ms.executeUpdate(sql);
+            ms.close();
+        }catch (SQLException e){
+            System.out.println("Error "+e.getMessage());
+        }
+    }
+    public void insertarPalabraEspecial(String esp, String ing, String cat, int codUsuario){
+        String sql = "insert into palabra values (' ',' ','"+cat+"', "+codUsuario+", '"+esp+"', '"+ing+"')";
+        try {
+            Statement ms = this.connection.createStatement();
+            ms.executeUpdate(sql);
+            ms.close();
+        }catch (SQLException e){
+            System.out.println("Error "+e.getMessage());
+        }
     }
 }
