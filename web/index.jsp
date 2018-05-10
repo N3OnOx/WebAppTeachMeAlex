@@ -1,7 +1,14 @@
+<%@ page import="teachmealex.BDController" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@include file="routes/header.jsp"%>
 
 <body>
+<%
+    BDController bdController = new BDController();
+    if (bdController.getStatus() == 0){
+       response.sendRedirect("login.jsp");
+    }
+%>
 <div class="wrapper">
     <%@include file="routes/navbar.jsp"%>
         <!-- Page Content Holder -->

@@ -32,6 +32,12 @@ public class Palabra {
         this.ing = ing;
     }
 
+    public Palabra(String specialEsp, String specialIng, int codUsuario) {
+        this.specialEsp = specialEsp;
+        this.specialIng = specialIng;
+        this.codUsuario = codUsuario;
+    }
+
     public String getSpecialEsp() {
         return specialEsp;
     }

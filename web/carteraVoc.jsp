@@ -4,9 +4,13 @@
 <%@ page import="java.util.ArrayList" %>
 <body>
 <%
+
     ArrayList<Palabra> palabras = new ArrayList<Palabra>();
     BDController bdController = new BDController();
-    palabras = bdController.damePalabras();
+    if (bdController.getStatus() == 0){
+        response.sendRedirect("login.jsp");
+    }
+    palabras = bdController.damePalabrasUser();
 %>
 <div class="wrapper">
     <%@include file="routes/navbar.jsp"%>
@@ -63,6 +67,15 @@
                             out.print("<td>"+palabras.get(i).getEsp()+"</td>");
                         }else if (j == 1){
                             out.print("<td>"+palabras.get(i).getIng()+"</td>");
+                        }else if (j == 2){
+                            out.print("<td>"+palabras.get(i).getCategory()+"</td>");
+                        }
+                    }
+                    for (int j = 0; j < 3; j++){
+                        if (j == 0){
+                            out.print("<td>"+palabras.get(i).getSpecialEsp()+"</td>");
+                        }else if (j == 1){
+                            out.print("<td>"+palabras.get(i).getSpecialIng()+"</td>");
                         }else if (j == 2){
                             out.print("<td>"+palabras.get(i).getCategory()+"</td>");
                         }

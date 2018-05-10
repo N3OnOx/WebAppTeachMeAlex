@@ -8,6 +8,9 @@
     String completeURL = request.getRequestURL().toString() + "?" + request.getQueryString();
     ArrayList<String> categorias = new ArrayList<String>();
     BDController bdController = new BDController();
+    if (bdController.getStatus() == 0){
+        response.sendRedirect("login.jsp");
+    }
     categorias = bdController.dameCategorias();
     String error = "";
     String display = "none";
@@ -22,6 +25,7 @@
             if (category.equalsIgnoreCase("Selecciona...")) {
                 error = "Tienes que seleccionar una categoría";
                 display = "block";
+                check = false;
             } else if (category.equalsIgnoreCase("0") && cat.equalsIgnoreCase("")) {
                 error = "Tienes que escribir una nueva categoría";
                 display = "block";
@@ -40,7 +44,18 @@
                 }
             }
         }else{
-            bdController.insertarPalabraEspecial(esp,ing,category, 1);
+            if (category.equalsIgnoreCase("Selecciona...")) {
+                error = "Tienes que seleccionar una categoría";
+                display = "block";
+                check = false;
+            } else if (category.equalsIgnoreCase("0") && cat.equalsIgnoreCase("")) {
+                error = "Tienes que escribir una nueva categoría";
+                display = "block";
+                check = false;
+            }
+            if (check){
+                bdController.insertarPalabraEspecial(esp,ing,category, 1);
+            }
         }
     }
 %>
@@ -71,7 +86,9 @@
 
         <h2>Alta de palabra</h2>
         <p>Vamos a introducir palabras en nuestra cartera de vocabulario. Para ello, especifica el significado en español, asímismo en Inglés y por último, escribe o selecciona una categoría de la lista de categorías</p>
-        <div style="display: <%out.print(display);%>" id="#errorForm"><p style="color: red;">Error: <%out.print(error);%></p> </div>
+        <div style="display: <%out.print(display);%>" class="alert alert-danger" role="alert" id="#errorForm">
+            ¡<%out.print(error);%>!
+        </div>
         <form action="altaVoca.jsp">
             <div class="form-group row">
                 <label for="inputEsp" class="col-sm-2 col-form-label">Español</label>
@@ -107,7 +124,7 @@
             </div>
             <div class="custom-control custom-checkbox my-1 mr-sm-2">
                 <input type="checkbox" name="specialWord" class="custom-control-input" id="customControlInline">
-                <label class="custom-control-label" for="customControlInline">Palabra especial</label>
+                <label data-toggle="tooltip" title="Alta" class="custom-control-label" for="customControlInline">Palabra especial</label>
             </div>
             <div class="form-group row">
                 <div class="col-sm-10">

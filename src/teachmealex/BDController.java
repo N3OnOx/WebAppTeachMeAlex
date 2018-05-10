@@ -82,16 +82,22 @@ public class BDController {
         }
     }
 
-    public ArrayList<Palabra> damePalabras(){
+    public ArrayList<Palabra> damePalabrasUser(){
         ArrayList<Palabra> palabras = new ArrayList<Palabra>();
+        ArrayList<Palabra> palabras2 = new ArrayList<Palabra>();
         try {
             Statement miStatement = this.connection.createStatement();
-            ResultSet rs=miStatement.executeQuery("SELECT * FROM palabra order by category asc");
+            ResultSet rs=miStatement.executeQuery("SELECT nEsp, nIng, category FROM palabra where codUsuario = "+codUser(nameUser())+" order by category asc");
+            ResultSet rs2=miStatement.executeQuery("SELECT specialEsp, specialIng, category FROM palabra where codUsuario = "+codUser(nameUser())+" order by category asc");
             while(rs.next()){
                 palabras.add(new Palabra(rs.getString("nEsp"),rs.getString("nIng"),rs.getString("category")));
             }
+            while(rs2.next()){
+                palabras2.add(new Palabra(rs2.getString("specialEsp"),rs2.getString("specialIng"),rs2.getString("category")));
+            }
             miStatement.close();
             rs.close();
+            rs2.close();
         } catch (SQLException e) {
             System.out.println("Error al generar el ArrayList de palabras en BDController "+e.getMessage());
         }
@@ -374,5 +380,92 @@ public class BDController {
         }catch (SQLException e){
             System.out.println("Error "+e.getMessage());
         }
+    }
+
+    public void altaUsuario(String user, String password, int codUser){
+        String sql = "insert into users values ('"+user+"','"+password+"',"+codUser+")";
+        try {
+            Statement ms = this.connection.createStatement();
+            ms.executeUpdate(sql);
+            ms.close();
+        }catch (SQLException e){
+            System.out.println("Error "+e.getMessage());
+        }
+    }
+
+    public int codUser(String user){
+        int cod = 0;
+        try {
+            Statement ms = this.connection.createStatement();
+            ResultSet rs = ms.executeQuery("select codUsuario from users where name ='"+user+"'");
+            while (rs.next()){
+                cod = rs.getInt(1);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return cod;
+    }
+
+    public String nameUser(){
+        String name = "";
+        try {
+            Statement ms = this.connection.createStatement();
+            ResultSet rs = ms.executeQuery("select nameUser from session");
+            while (rs.next()){
+                name = rs.getString(1);
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return name;
+    }
+
+    public void status(int cod, String nameUser){
+        String sql1 ="update session set status = 0";
+        String sql0 = "update session set status = 1, user = "+cod+", nameUser = '"+nameUser+"'";
+        int status = 0;
+        try {
+            Statement ms = this.connection.createStatement();
+            ResultSet rs = ms.executeQuery("SELECT status from session");
+            while (rs.next()){
+                status = rs.getInt(1);
+            }
+            if (status == 0){
+                ms.executeUpdate(sql0);
+            }else if (status == 1){
+                ms.executeUpdate(sql1);
+            }
+            rs.close();
+            ms.close();
+        }catch (SQLException e){
+            System.out.println("Error "+e.getMessage());
+        }
+    }
+    public void status0(){
+        String sql1 ="update session set status = 0";
+
+        try {
+            Statement ms = this.connection.createStatement();
+            ms.executeUpdate(sql1);
+            ms.close();
+        }catch (SQLException e){
+            System.out.println("Error "+e.getMessage());
+        }
+    }
+    public int getStatus(){
+        String sql1 ="select status from session;";
+        int status = 0;
+        try {
+            Statement ms = this.connection.createStatement();
+            ResultSet rs = ms.executeQuery(sql1);
+            while (rs.next()){
+                status = rs.getInt(1);
+            }
+            ms.close();
+        }catch (SQLException e){
+            System.out.println("Error "+e.getMessage());
+        }
+        return status;
     }
 }

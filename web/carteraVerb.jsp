@@ -4,9 +4,13 @@
 <%@ page import="java.util.ArrayList" %>
 <body>
 <%
-    ArrayList<Verbo> verbos= new ArrayList<Verbo>();
     BDController bdController = new BDController();
+    if (bdController.getStatus() == 0){
+        response.sendRedirect("login.jsp");
+    }
+    ArrayList<Verbo> verbos= new ArrayList<Verbo>();
     verbos = bdController.dameVerbos();
+
 %>
 <div class="wrapper">
     <%@include file="routes/navbar.jsp"%>
