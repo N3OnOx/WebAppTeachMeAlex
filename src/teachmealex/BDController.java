@@ -1,5 +1,6 @@
 package teachmealex;
 
+import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -21,7 +22,8 @@ public class BDController {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/teachmealex", "root","");
+            this.connection = DriverManager.getConnection("jdbc:mysql://node21435-teachmealex.jelastic.cloudhosted.es:3306/teachmealex", "root","LYMicr48052");
+            //this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/teachmealex", "root","");
             String SQLExistePesp = "select * from palabra where nEsp = ?";
             this.existePesp = connection.prepareStatement(SQLExistePesp);
             String SQLExistePalabra = "select * from palabra where nEsp = ? or nIng = ?";
@@ -84,24 +86,33 @@ public class BDController {
 
     public ArrayList<Palabra> damePalabrasUser(){
         ArrayList<Palabra> palabras = new ArrayList<Palabra>();
-        ArrayList<Palabra> palabras2 = new ArrayList<Palabra>();
         try {
             Statement miStatement = this.connection.createStatement();
             ResultSet rs=miStatement.executeQuery("SELECT nEsp, nIng, category FROM palabra where codUsuario = "+codUser(nameUser())+" order by category asc");
-            ResultSet rs2=miStatement.executeQuery("SELECT specialEsp, specialIng, category FROM palabra where codUsuario = "+codUser(nameUser())+" order by category asc");
             while(rs.next()){
                 palabras.add(new Palabra(rs.getString("nEsp"),rs.getString("nIng"),rs.getString("category")));
             }
-            while(rs2.next()){
-                palabras2.add(new Palabra(rs2.getString("specialEsp"),rs2.getString("specialIng"),rs2.getString("category")));
-            }
             miStatement.close();
             rs.close();
-            rs2.close();
         } catch (SQLException e) {
             System.out.println("Error al generar el ArrayList de palabras en BDController "+e.getMessage());
         }
         return palabras;
+    }
+    public ArrayList<PalabraEspecial> damePalabrasEspecialesUser(){
+        ArrayList<PalabraEspecial> palabrasSp = new ArrayList<PalabraEspecial>();
+        try {
+            Statement miStatement = this.connection.createStatement();
+            ResultSet rs=miStatement.executeQuery("SELECT specialEsp, specialIng, category FROM palabraespecial where codUsuario = "+codUser(nameUser())+" order by category asc");
+            while(rs.next()){
+                palabrasSp.add(new PalabraEspecial(rs.getString("specialEsp"),rs.getString("specialIng"),rs.getString("category")));
+            }
+            miStatement.close();
+            rs.close();
+        } catch (SQLException e) {
+            System.out.println("Error al generar el ArrayList de palabras en BDController "+e.getMessage());
+        }
+        return palabrasSp;
     }
 
     public ArrayList<String> dameCategorias(){
@@ -362,7 +373,7 @@ public class BDController {
     }
 
     public void insertarPalabra(String esp, String ing, String cat, int codUsuario){
-        String sql = "insert into palabra values ('"+esp+"','"+ing+"', '"+cat+"', "+codUsuario+", ' ', ' ')";
+        String sql = "insert into palabra values ('"+esp+"','"+ing+"', '"+cat+"', "+codUsuario+")";
         try {
             Statement ms = this.connection.createStatement();
             ms.executeUpdate(sql);
@@ -372,7 +383,7 @@ public class BDController {
         }
     }
     public void insertarPalabraEspecial(String esp, String ing, String cat, int codUsuario){
-        String sql = "insert into palabra values (' ',' ','"+cat+"', "+codUsuario+", '"+esp+"', '"+ing+"')";
+        String sql = "insert into palabraespecial values ('"+esp+"', '"+ing+"', '"+cat+"', "+codUsuario+")";
         try {
             Statement ms = this.connection.createStatement();
             ms.executeUpdate(sql);
@@ -467,5 +478,19 @@ public class BDController {
             System.out.println("Error "+e.getMessage());
         }
         return status;
+    }
+
+    public int ultimoCodUser(){
+        int cod = 0;
+        try {
+            Statement ms = this.connection.createStatement();
+            ResultSet rs = ms.executeQuery("select codUsuario from users order by codUsuario desc limit 1");
+            while (rs.next()){
+                cod = rs.getInt("codUsuario");
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return cod;
     }
 }

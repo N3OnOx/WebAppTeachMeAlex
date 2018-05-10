@@ -1,12 +1,10 @@
 <%@ page import="teachmealex.BDController" %>
-<%@ page import="java.util.ArrayList" %>
 <!DOCTYPE html>
 <head>
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 <link rel="stylesheet" href="css/login.css">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 </head>
 <body>
 
@@ -23,7 +21,7 @@
         if (completeURL.contains("register")) {
             user = request.getParameter("usuario");
             password = request.getParameter("pass");
-            codUser = 4;
+            codUser = bdController.ultimoCodUser() + 1;
             display="block";
             display2="none";
             bdController.altaUsuario(user, password, codUser);
@@ -49,14 +47,16 @@
 
 <div class="container">
     <div class="row">
+
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-login">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-xs-6">
-                            <a href="#" class="active" id="login-form-link">Login</a>
+                        <img id="img" src="img/english/logo.png"/>
+                        <div class="col-xs-6 bajar">
+                            <a href="#" class="active" id="login-form-link">Acceder</a>
                         </div>
-                        <div class="col-xs-6">
+                        <div class="col-xs-6 bajar">
                             <a href="#" id="register-form-link">Registro</a>
                         </div>
                     </div>
@@ -70,7 +70,7 @@
                                     <input type="text" name="usuario" id="username" tabindex="1" class="form-control" placeholder="Usuario" value="">
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" name="pass" id="password" tabindex="2" class="form-control" placeholder="Contraseña">
+                                    <input type="password" name="pass" id="password" tabindex="2" class="form-control" placeholder="Contrase&ntilde;a">
                                 </div>
                                 <div class="form-group">
                                     <div class="row">
@@ -88,10 +88,10 @@
                             </form>
                             <form id="register-form" action="#" role="form" style="display: none;">
                                 <div class="form-group">
-                                    <input type="text" name="usuario" id="username" tabindex="1" class="form-control" placeholder="Usuario" value="">
+                                    <input type="text" name="usuario" id="usuario" tabindex="1" class="form-control" placeholder="Usuario" value="">
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" name="pass" id="password" tabindex="2" class="form-control" placeholder="Contraseña">
+                                    <input type="password" name="pass" id="pass" tabindex="2" class="form-control" placeholder="Contrase&ntilde;a">
                                 </div>
                                 <div class="form-group">
                                     <div class="row">

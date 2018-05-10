@@ -4,7 +4,15 @@
 @import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
 
 
+#userButton{
+    border: darkblue;
+    text-align: center;
+    padding-top: 5px;
+}
 
+.clear {
+    clear: both;
+}
 
 body {
     font-family: 'Poppins', sans-serif;

@@ -6,11 +6,13 @@
 <%
 
     ArrayList<Palabra> palabras = new ArrayList<Palabra>();
+    ArrayList<PalabraEspecial> palabrasSp = new ArrayList<PalabraEspecial>();
     BDController bdController = new BDController();
     if (bdController.getStatus() == 0){
         response.sendRedirect("login.jsp");
     }
     palabras = bdController.damePalabrasUser();
+    palabrasSp = bdController.damePalabrasEspecialesUser();
 %>
 <div class="wrapper">
     <%@include file="routes/navbar.jsp"%>
@@ -46,7 +48,7 @@
 
         <h2>Mi cartera de vocabulario<img src="img/english/vocabulary.png" id="logovoca"></h2>
         <ul class="nav navbar-nav navbar-right" id="modificaciones">
-            <li><a href="#"><i class="glyphicon glyphicon-plus-sign"></i></a></li>
+            <li><a href="altaVoca.jsp"><i class="glyphicon glyphicon-plus-sign"></i></a></li>
             <li><a href="#"><i class="glyphicon glyphicon-minus-sign"></i></a></li>
             <li><a href="#"><i class="glyphicon glyphicon-pencil"></i></a></li>
         </ul>
@@ -71,13 +73,17 @@
                             out.print("<td>"+palabras.get(i).getCategory()+"</td>");
                         }
                     }
-                    for (int j = 0; j < 3; j++){
-                        if (j == 0){
-                            out.print("<td>"+palabras.get(i).getSpecialEsp()+"</td>");
-                        }else if (j == 1){
-                            out.print("<td>"+palabras.get(i).getSpecialIng()+"</td>");
-                        }else if (j == 2){
-                            out.print("<td>"+palabras.get(i).getCategory()+"</td>");
+                    out.print("</tr>");
+                }
+                for (int h = 0; h < palabrasSp.size(); h++){
+                    out.print("<tr>");
+                    for (int a = 0; a < 3; a++){
+                        if (a == 0){
+                            out.print("<td>"+palabrasSp.get(h).getSpecialEsp()+"</td>");
+                        }else if (a == 1){
+                            out.print("<td>"+palabrasSp.get(h).getSpecialIng()+"</td>");
+                        }else if (a == 2){
+                            out.print("<td>"+palabrasSp.get(h).getCategory()+"</td>");
                         }
                     }
                     out.print("</tr>");

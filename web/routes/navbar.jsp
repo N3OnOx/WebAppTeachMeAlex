@@ -3,8 +3,11 @@
     <div class="sidebar-header">
         <img width="250" src="img/english/logo.png">
     </div>
-
-    <ul class="list-unstyled components">
+    <div id="userButton"><span class="glyphicon glyphicon-user"></span> <%out.print(bdController.nameUser());%>
+    <a href="login.jsp"><button type="button" id="logOutButton" class="btn btn-default btn-sm">
+        <span class="glyphicon glyphicon-log-out"></span> Salir
+    </button></a></div>
+    <ul class="list-unstyled components clear">
         <li class="active">
             <a href="index.jsp" >
                 <i class="glyphicon glyphicon-home"></i>
@@ -46,5 +49,5 @@
             </a>
         </li>
     </ul>
-    <div class="sublogo"><img src=""></div>
+
 </nav>

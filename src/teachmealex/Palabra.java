@@ -1,18 +1,12 @@
 package teachmealex;
 
 public class Palabra {
-    private String esp, ing, category, specialEsp, specialIng;
+    private String esp, ing, category;
     private int codUsuario;
 
     public Palabra() {
     }
 
-    public Palabra(String category, String specialEsp, String specialIng, int codUsuario) {
-        this.category = category;
-        this.specialEsp = specialEsp;
-        this.specialIng = specialIng;
-        this.codUsuario = codUsuario;
-    }
 
     public Palabra(int codUsuario, String esp, String ing, String category){
         this.esp = esp;
@@ -32,27 +26,6 @@ public class Palabra {
         this.ing = ing;
     }
 
-    public Palabra(String specialEsp, String specialIng, int codUsuario) {
-        this.specialEsp = specialEsp;
-        this.specialIng = specialIng;
-        this.codUsuario = codUsuario;
-    }
-
-    public String getSpecialEsp() {
-        return specialEsp;
-    }
-
-    public void setSpecialEsp(String specialEsp) {
-        this.specialEsp = specialEsp;
-    }
-
-    public String getSpecialIng() {
-        return specialIng;
-    }
-
-    public void setSpecialIng(String specialIng) {
-        this.specialIng = specialIng;
-    }
 
     public int getCodUsuario() {
         return codUsuario;

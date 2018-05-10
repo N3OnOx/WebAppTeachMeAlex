@@ -32,15 +32,21 @@
                 check = false;
             }
 
+            if (!bdController.existePalabraEsp(esp)) {
+                error = "No existe esa palabra en español";
+                display = "block";
+                check = false;
+            } else if (!bdController.existePDiccionario("ding", ing)) {
+                error = "No existe esa palabra en ingles";
+                display = "block";
+                check = false;
+            }
+
             if (check) {
-                if (!bdController.existePalabraEsp(esp)) {
-                    error = "No existe esa palabra en español";
-                    display = "block";
-                } else if (!bdController.existePDiccionario("ding", ing)) {
-                    error = "No existe esa palabra en ingles";
-                    display = "block";
-                }else {
-                    bdController.insertarPalabra(esp,ing,category, 1);
+                if (category.equalsIgnoreCase("0") && !cat.equalsIgnoreCase("")){
+                    bdController.insertarPalabra(esp,ing,cat, bdController.codUser(bdController.nameUser()));
+                }else if (!category.equalsIgnoreCase("0")){
+                    bdController.insertarPalabra(esp,ing,category, bdController.codUser(bdController.nameUser()));
                 }
             }
         }else{
@@ -53,8 +59,12 @@
                 display = "block";
                 check = false;
             }
-            if (check){
-                bdController.insertarPalabraEspecial(esp,ing,category, 1);
+            if (check) {
+                if (category.equalsIgnoreCase("0") && !cat.equalsIgnoreCase("")){
+                    bdController.insertarPalabraEspecial(esp,ing,cat, bdController.codUser(bdController.nameUser()));
+                }else if (!category.equalsIgnoreCase("0")){
+                    bdController.insertarPalabraEspecial(esp,ing,category, bdController.codUser(bdController.nameUser()));
+                }
             }
         }
     }
